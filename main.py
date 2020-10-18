@@ -2,10 +2,11 @@ import streamlit as st
 from fastai.vision.all import PILImage, Learner, load_learner
 from fastcore.dispatch import TypeDispatch
 
+
 @st.cache(hash_funcs={TypeDispatch: hash}, allow_output_mutation=True)
 def load_model(path: str) -> Learner:
-    learner: Learner = load_learner(path)
-    return learner
+    return load_learner(path)
+
 
 '''
 # Veneto Dashboard
@@ -46,11 +47,10 @@ uploaded_vase_image = st.sidebar.file_uploader("Upload vase image",
                                                type=['png', 'jpg'])
 if uploaded_vase_image is not None:
     image = PILImage.create(uploaded_vase_image)
-    learner: Learner = load_model('models/murano_vases/resnet50.pkl')
+    learner = load_model('models/murano_vases/resnet50.pkl')
     label, index, probs = learner.predict(image)
     if label == 'not_murano':
         st.write("This **doesn't** seem like a Venetian vase!")
     else:
         st.write("Looks like a Venetian vase to me!")
     st.image(image, width=240)
-
